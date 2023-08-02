@@ -1,0 +1,55 @@
+classname: tsdat.io.retrievers.DefaultRetriever
+readers:
+  .*:
+    classname: tsdat.io.readers.ZipReader
+    parameters:
+      readers:
+        .*ndbc.*:
+          classname: pipelines.wave_module_example.readers.NDBCDataReader
+          parameters:
+            # Manually created parameters from reader.py
+            ndbc_parameter: swden
+            water_depth_m: 60
+            requests_proxy:
+              http: None
+
+        .*power.*:
+          classname: tsdat.io.readers.CSVReader
+          parameters:
+            read_csv_kwargs:
+              # From pandas read_csv documentation
+              header: 0
+              parse_dates: True
+              infer_datetime_format: True
+
+coords:
+  time:
+    .*ndbc.*:
+      name: time
+      data_converters:
+        - classname: tsdat.io.converters.StringToDatetime
+          format: "%Y-%m-%d %H:%M:%S"
+          timezone: UTC
+  frequency:
+    .*ndbc.*:
+      name: frequency
+
+  time_device:
+    .*power.*:
+      name: Time
+      data_converters:
+        - classname: tsdat.io.converters.StringToDatetime
+          format: "%Y-%m-%d %H:%M:%S"
+          timezone: UTC
+
+data_vars:
+  wave_energy_density:
+    .*ndbc.*:
+      name: spectra
+
+  device_power:
+    .*power.*:
+      name: Power[kW]
+      data_converters:
+        - classname: tsdat.io.converters.UnitsConverter
+          input_units: kW

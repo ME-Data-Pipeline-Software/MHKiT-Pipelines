@@ -1,0 +1,15 @@
+classname: pipelines.wave_module_example.pipeline.WaveModuleExample
+
+triggers:
+  - .*\.zip
+
+retriever:
+  path: pipelines/wave_module_example/config/retriever.yaml
+
+dataset:
+  path: pipelines/wave_module_example/config/dataset.yaml
+
+quality:
+  path: shared/quality.yaml
+storage:
+  path: shared/storage.yaml
