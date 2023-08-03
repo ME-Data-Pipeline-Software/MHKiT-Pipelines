@@ -5,7 +5,7 @@ readers:
     parameters:
       readers:
         .*ndbc.*:
-          classname: pipelines.wave_module_example.readers.NDBCDataReader
+          classname: pipelines.wave_example.readers.NDBCDataReader
           parameters:
             # Manually created parameters from reader.py
             ndbc_parameter: swden
