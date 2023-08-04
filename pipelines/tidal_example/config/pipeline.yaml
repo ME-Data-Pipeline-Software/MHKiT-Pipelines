@@ -1,8 +1,7 @@
 classname: pipelines.tidal_example.pipeline.TidalExample
 
 triggers:
-  # DEVELOPER: Update regex patterns that should trigger this pipeline
-  - .*mhkit.*\.csv
+  - .*noaa.*\.json
 
 retriever:
   path: pipelines/tidal_example/config/retriever.yaml

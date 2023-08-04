@@ -1,0 +1,16 @@
+classname: pipelines.river_example.pipeline.RiverExample
+
+triggers:
+  # Trigger for any 8 digits
+  - \b[0-9]{8}\b
+
+retriever:
+  path: pipelines/river_example/config/retriever_requests.yaml
+
+dataset:
+  path: pipelines/river_example/config/dataset.yaml
+
+quality:
+  path: shared/quality.yaml
+storage:
+  path: shared/storage.yaml

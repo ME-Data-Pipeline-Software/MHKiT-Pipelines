@@ -1,0 +1,23 @@
+classname: tsdat.io.retrievers.DefaultRetriever
+readers:
+  .*:
+    classname: pipelines.river_example.readers.USGSWaterServicesRequest
+    parameters:
+      parameter: "00060"
+      start_date: "2009-08-01"
+      end_date: "2019-08-01"
+      data_type: Daily
+
+coords:
+  time:
+    name: time
+    data_converters:
+      - classname: tsdat.io.converters.StringToDatetime
+        timezone: UTC
+
+data_vars:
+  discharge:
+    name: Discharge, cubic feet per second
+    data_converters:
+      - classname: tsdat.io.converters.UnitsConverter
+        input_units: ft^3/s

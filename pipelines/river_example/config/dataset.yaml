@@ -1,0 +1,37 @@
+attrs:
+  title: MHKiT River Module Example
+  description:
+    The following example will familiarize the user with the MHKIT river module by
+    stepping through the calculation of annual energy produced for one turbine in the
+    Tanana River near Nenana, Alaska.
+  location_id: mhkit
+  dataset_name: river_example
+  data_level: a1
+  # qualifier:
+  # temporal:
+  # institution:
+
+coords:
+  time:
+    dims: [time]
+    dtype: datetime64[s]
+    attrs:
+      long_name: Time
+      standard_name: time
+      units: Seconds since 1970-01-01 00:00:00
+      timezone: UTC
+
+data_vars:
+  discharge:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Discharge
+      standard_name: water_volume_transport_in_river_channel
+      units: m^3/s
+  exceed_prob:
+    dims: [time]
+    dtype: float32
+    attrs:
+      long_name: Exceedance Probability
+      units: percent

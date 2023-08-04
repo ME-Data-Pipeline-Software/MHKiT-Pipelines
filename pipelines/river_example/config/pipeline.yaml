@@ -1,0 +1,15 @@
+classname: pipelines.river_example.pipeline.RiverExample
+
+triggers:
+  - .*USGS.*\.json
+
+retriever:
+  path: pipelines/river_example/config/retriever.yaml
+
+dataset:
+  path: pipelines/river_example/config/dataset.yaml
+
+quality:
+  path: shared/quality.yaml
+storage:
+  path: shared/storage.yaml
