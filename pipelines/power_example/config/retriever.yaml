@@ -1,0 +1,30 @@
+classname: tsdat.io.retrievers.DefaultRetriever
+readers:
+  .*:
+    classname: tsdat.io.readers.CSVReader
+    parameters:
+      read_csv_kwargs:
+        skip_blank_lines: True
+        index_col: Time_UTC
+
+coords:
+  time:
+    name: Time_UTC
+    data_converters:
+      - classname: tsdat.io.converters.StringToDatetime
+        format: "%Y-%m-%d %H:%M:%S.%f"
+        timezone: UTC
+
+data_vars:
+  a_voltage:
+    name: MODAQ_Va_V
+  b_voltage:
+    name: MODAQ_Vb_V
+  c_voltage:
+    name: MODAQ_Vc_V
+  a_current:
+    name: MODAQ_Ia_I
+  b_current:
+    name: MODAQ_Ib_I
+  c_current:
+    name: MODAQ_Ic_I

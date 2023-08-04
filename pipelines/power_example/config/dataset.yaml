@@ -1,0 +1,114 @@
+attrs:
+  title: MHKiT Power Module Example
+  description:
+    The following example uses the MHKiT power module to compute power, instantaneous
+    frequency, and harmonics from time-series of voltage and current.
+  location_id: mhkit
+  dataset_name: power_example
+  data_level: a1
+  # qualifier:
+  # temporal:
+  # institution:
+
+coords:
+  time:
+    dims: [time]
+    dtype: datetime64[ns]
+    attrs:
+      long_name: Time
+      standard_name: time
+      units: Seconds since 1970-01-01 00:00:00 UTC
+      timezone: UTC
+
+data_vars:
+  a_voltage:
+    dims: [time]
+    dtype: float32
+    attrs:
+      long_name: Voltage line A
+      units: V
+  b_voltage:
+    dims: [time]
+    dtype: float32
+    attrs:
+      long_name: Voltage line B
+      units: V
+  c_voltage:
+    dims: [time]
+    dtype: float32
+    attrs:
+      long_name: Voltage line C
+      units: V
+
+  a_current:
+    dims: [time]
+    dtype: float32
+    attrs:
+      long_name: Current line A
+      units: A
+  b_current:
+    dims: [time]
+    dtype: float32
+    attrs:
+      long_name: Current line B
+      units: A
+  c_current:
+    dims: [time]
+    dtype: float32
+    attrs:
+      long_name: Current line C
+      units: A
+
+  ac_power:
+    dims: [time]
+    dtype: float32
+    attrs:
+      long_name: Power, Alternating Current
+      units: W
+  a_inst_freq:
+    dims: [time]
+    dtype: float32
+    attrs:
+      long_name: Instantaneous Frequency Voltage A
+      units: Hz
+  b_inst_freq:
+    dims: [time]
+    dtype: float32
+    attrs:
+      long_name: Instantaneous Frequency Voltage B
+      units: Hz
+  c_inst_freq:
+    dims: [time]
+    dtype: float32
+    attrs:
+      long_name: Instantaneous Frequency Voltage C
+      units: Hz
+
+  power_factor:
+    data: 0.96
+    dims: []
+    dtype: float32
+    attrs:
+      long_name: Power Factor
+      units: "1"
+  sample_freq:
+    data: 50000
+    dims: []
+    dtype: int
+    attrs:
+      long_name: Sample Frequency
+      units: Hz
+  grid_freq:
+    data: 60
+    dims: []
+    dtype: int
+    attrs:
+      long_name: Grid Frequency
+      units: Hz
+  rated_current:
+    data: 18.8
+    dims: []
+    dtype: int
+    attrs:
+      long_name: Rated Current
+      units: A
