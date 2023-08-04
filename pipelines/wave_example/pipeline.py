@@ -17,11 +17,11 @@ class WaveExample(IngestPipeline):
         spectra = dataset['wave_energy_density'].to_pandas().transpose()
         power = dataset['device_power'].to_pandas()
 
-        dataset['wave_hs'].values = wave.resource.significant_wave_height(spectra).values.squeeze()
-        dataset['wave_te'].values = wave.resource.energy_period(spectra).values.squeeze()
-        dataset['wave_ta'].values = wave.resource.average_wave_period(spectra).values.squeeze()
-        dataset['wave_tp'].values = wave.resource.peak_period(spectra).values.squeeze()
-        dataset['wave_tz'].values = wave.resource.average_zero_crossing_period(spectra).values.squeeze()
+        dataset['wave_hs'].values = wave.resource.significant_wave_height(spectra).squeeze()
+        dataset['wave_te'].values = wave.resource.energy_period(spectra).squeeze()
+        dataset['wave_ta'].values = wave.resource.average_wave_period(spectra).squeeze()
+        dataset['wave_tp'].values = wave.resource.peak_period(spectra).squeeze()
+        dataset['wave_tz'].values = wave.resource.average_zero_crossing_period(spectra).squeeze()
         
         J = wave.resource.energy_flux(spectra, h=dataset.attrs['water_depth'], deep=False, rho=1030, g=9.81, ratio=2)
         dataset['wave_energy_flux'].values = J.values.squeeze()

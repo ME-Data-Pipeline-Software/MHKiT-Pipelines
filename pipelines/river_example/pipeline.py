@@ -13,8 +13,8 @@ class RiverExample(IngestPipeline):
 
     def hook_customize_dataset(self, dataset: xr.Dataset) -> xr.Dataset:
         # (Optional) Use this hook to modify the dataset before qc is applied
-        F = river.resource.exceedance_probability(dataset['discharge'].to_pandas())
-        dataset['exceed_prob'].values = F['F'].values
+        Q = dataset['discharge'].to_pandas()
+        dataset['exceed_prob'].values = river.resource.exceedance_probability(Q).squeeze()
 
         return dataset
 

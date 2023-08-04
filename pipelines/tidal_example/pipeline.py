@@ -35,8 +35,7 @@ class TidalExample(IngestPipeline):
         dataset.attrs['principal_directions'] = list(directions)
 
         # Calculate exceedance probability of data
-        EP = tidal.resource.exceedance_probability(s)
-        dataset['exceed_prob'].values = EP.values.squeeze()
+        dataset['exceed_prob'].values = tidal.resource.exceedance_probability(s).squeeze()
 
         return dataset
 
