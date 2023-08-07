@@ -1,0 +1,51 @@
+classname: tsdat.io.retrievers.DefaultRetriever
+readers:
+  .*:
+    classname: tsdat.io.readers.CSVReader
+    parameters:
+      read_csv_kwargs:
+        header: 0
+
+coords:
+  time:
+    name: Timestamp
+    data_converters:
+      - classname: pipelines.loads_example.converters.Excel2Datetime
+
+data_vars:
+  uWind_80m:
+    name: uWind_80m
+  WD_ModActive:
+    name: WD_ModActive
+  WD_Nacelle:
+    name: WD_Nacelle
+  WD_NacelleMod:
+    name: WD_NacelleMod
+  LSSDW_Tq:
+    name: LSSDW_Tq
+  LSSDW_My:
+    name: LSSDW_My
+  LSSDW_Mz:
+    name: LSSDW_Mz
+  TTTq:
+    name: TTTq
+  TT_ForeAft:
+    name: TT_ForeAft
+  TT_SideSide:
+    name: TT_SideSide
+  TB_ForeAft:
+    name: TB_ForeAft
+  TB_SideSide:
+    name: TB_SideSide
+  BL3_FlapMom:
+    name: BL3_FlapMom
+  BL3_EdgeMom:
+    name: BL3_EdgeMom
+  BL1_FlapMom:
+    name: BL1_FlapMom
+  BL1_EdgeMom:
+    name: BL1_EdgeMom
+  ActivePower:
+    name: ActivePower
+  yawoffset:
+    name: yawoffset

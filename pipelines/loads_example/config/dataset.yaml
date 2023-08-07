@@ -1,0 +1,135 @@
+attrs:
+  title: MHKiT Loads Module Example
+  description:
+    The following example will help familiarize you with some of the functions in the
+    MHKiT loads module that you can use to assist you in your loads analysis.
+  location_id: mhkit
+  dataset_name: loads_example
+  data_level: a1
+  # qualifier:
+  # temporal:
+  # institution:
+
+coords:
+  time:
+    dims: [time]
+    dtype: datetime64[ns]
+    attrs:
+      long_name: Time
+      standard_name: time
+      units: Seconds since 1970-01-01 00:00:00 UTC
+      timezone: UTC
+
+data_vars:
+  uWind_80m:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Wind Speed at 80 m altitude
+      standard_name: wind_speed
+      units: m/s
+  WD_ModActive:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Wind Direction Mod Active
+      standard_name: wind_from_direction
+      units: degT
+  WD_Nacelle:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Wind Direction Nacelle
+      standard_name: wind_from_direction
+      units: degT
+  WD_NacelleMod:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Wind Direction Nacelle Mod
+      standard_name: wind_from_direction
+      units: degT
+  LSSDW_Tq:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: LSSDW Torque
+      units: kNm
+  LSSDW_My:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: LSSDW y-Moment
+      units: kNm
+  LSSDW_Mz:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: LSSDW z-Moment
+      units: kNm
+  TTTq:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: TT Torque
+      units: kNm
+  TT_ForeAft:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: TT Fore-Aft
+      units: kNm
+  TT_SideSide:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: TT Side-Side
+      units: kNm
+  TB_ForeAft:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Tower Base Fore-Aft Moment
+      units: kNm
+  TB_SideSide:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Tower Base Side-Side Moment
+      units: kNm
+  BL3_FlapMom:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Blade 3 Root Moment
+      units: kNm
+  BL3_EdgeMom:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Blade 3 Edge Moment
+      units: kNm
+  BL1_FlapMom:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Blade 1 Root Moment
+      units: kNm
+  BL1_EdgeMom:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Blade 1 Edge Moment
+      units: kNm
+  ActivePower:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Turbine Active Power
+      units: kW
+  yawoffset:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Turbine Yaw Offset
+      units: deg

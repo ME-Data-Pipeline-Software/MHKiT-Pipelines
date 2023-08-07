@@ -1,0 +1,16 @@
+classname: pipelines.loads_example.pipeline.LoadsExample
+
+triggers:
+  # DEVELOPER: Update regex patterns that should trigger this pipeline
+  - .*loads.*\.csv
+
+retriever:
+  path: pipelines/loads_example/config/retriever.yaml
+
+dataset:
+  path: pipelines/loads_example/config/dataset.yaml
+
+quality:
+  path: shared/quality.yaml
+storage:
+  path: shared/storage.yaml
