@@ -1,0 +1,62 @@
+classname: tsdat.DefaultRetriever
+readers:
+  .*:
+    classname: pipelines.cdip_example.readers.CDIPWaveRequest
+    parameters:
+      data_type: realtime
+
+coords:
+  time:
+    name: waveTime
+  frequency:
+    name: waveFrequency
+  sst_time:
+    name: sstTime
+  gps_time:
+    name: gpsTime
+  dwr_time:
+    name: [dwrTime, dwr4Time]
+
+data_vars:
+  wave_flag_primary:
+    name: waveFlagPrimary
+  wave_flag_secondary:
+    name: waveFlagSecondary
+  wave_hs:
+    name: waveHs
+  wave_tp:
+    name: waveTp
+  wave_ta:
+    name: waveTa
+  wave_dp:
+    name: waveDp
+  wave_tz:
+    name: waveTz
+  frequency_flag_primary:
+    name: waveFrequencyFlagPrimary
+  frequency_flag_secondary:
+    name: waveFrequencyFlagSecondary
+  sst_flag_primary:
+    name: sstFlagPrimary
+  sst_flag_secondary:
+    name: sstFlagSecondary
+  sst:
+    name: sstSeaSurfaceTemperature
+  gps_status_flags:
+    name: gpsStatusFlags
+  gps_latitude:
+    name: gpsLatitude
+  gps_longitude:
+    name: gpsLongitude
+  dwr_orientation:
+    name: dwrOrientation
+  dwr_inclination:
+    name: dwrInclination
+  wave_energy_density:
+    name: waveEnergyDensity
+  wave_mean_direction:
+    name: waveMeanDirection
+  wave_check_factor:
+    name: waveCheckFactor
+  wave_spread:
+    name: waveSpread

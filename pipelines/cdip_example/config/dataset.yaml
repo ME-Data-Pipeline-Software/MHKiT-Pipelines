@@ -1,0 +1,398 @@
+attrs:
+  title: MHKiT CDIP IO Example
+  description:
+    MHKiT includes functions to pull data directly from the Coastal Data Information
+    Program (CDIP), an extensive network for monitoring waves and beaches along the US
+    coast.
+  summary:
+    Directional wave and sea surface temperature measurements collected in situ by
+    Datawell DWR-M3 directional buoy
+  location_id: cdip
+  dataset_name: "000" # Updated in pipeline hook
+  data_level: c1
+  # Other attributes migrated from original file
+
+coords:
+  time:
+    dims: [time]
+    dtype: datetime64[ns]
+    attrs:
+      units: Seconds since 1970-01-01 00:00:00
+      long_name: UTC sample start time
+      standard_name: time
+      axis: T
+      bounds: waveTimeBounds
+      comment:
+        Spectral processing performed on 1600-second samples specified by
+        waveTimeBounds.
+  frequency:
+    dims: [frequency]
+    dtype: float32
+    attrs:
+      long_name: band center frequency
+      units: hertz
+      standard_name: wave_frequency
+      bounds: waveFrequencyBounds
+  sst_time:
+    dims: [sst_time]
+    dtype: datetime64[ns]
+    attrs:
+      units: Seconds since 1970-01-01 00:00:00
+      long_name: UTC sample time
+      standard_name: time
+      axis: T
+      bounds: sstTimeBounds
+  gps_time:
+    dims: [gps_time]
+    dtype: datetime64[ns]
+    attrs:
+      units: Seconds since 1970-01-01 00:00:00
+      long_name: UTC sample time
+      standard_name: time
+      axis: T
+      bounds: gpsTimeBounds
+  dwr_time:
+    dims: [dwr_time]
+    dtype: datetime64[ns]
+    attrs:
+      units: Seconds since 1970-01-01 00:00:00
+      long_name: UTC sample time
+      standard_name: time
+      axis: T
+      bounds: dwrTimeBounds
+
+data_vars:
+  wave_flag_primary:
+    dims: [time]
+    dtype: int
+    attrs:
+      units: "1"
+      long_name: primary wave QC flag
+      valid_min: 1
+      valid_max: 9
+      flag_values:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 9
+      flag_meanings: [good, not_evaluated, questionable, bad, missing]
+      reference:
+        Ocean Data Standards, UNESCO 2013 - IOC Manuals and Guides, 54, Volume 3 Version
+        1
+      ancillary_variables: wave_flag_secondary
+  wave_flag_secondary:
+    dims: [time]
+    dtype: int
+    attrs:
+      units: "1"
+      long_name: secondary wave QC flag
+      valid_min: 0
+      valid_max: 18
+      flag_values:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+        - 11
+        - 12
+        - 13
+        - 14
+        - 15
+        - 16
+        - 17
+        - 18
+      flag_meanings:
+        [
+          unspecified,
+          sensor_issues,
+          Hs_out_of_range,
+          Tp_out_of_range,
+          Ta_out_of_range,
+          elevated_check_factors,
+          Hs_spike,
+          Ta_spike,
+          low_freq_energy_spike,
+          excessive_low_freq_energy,
+          hf_transmission_errors_fixed,
+          hf_transmission_errors_present,
+          directional_coeffs_out_of_range,
+          incomplete_spectrum,
+          spectrum_layout_modified,
+          too_few_segments,
+          inclination_off,
+          max_energy_at_highest_freq,
+          freq_over_hull_response_limit,
+        ]
+      reference: http://cdip.ucsd.edu/documentation
+  wave_hs:
+    dims: [time]
+    dtype: float32
+    attrs:
+      long_name: significant wave height
+      units: m
+      standard_name: sea_surface_wave_significant_height
+      grid_mapping: metaGridMapping
+      valid_min: 0.0
+      valid_max: 20.0
+      ancillary_variables: wave_flag_primary wave_flag_secondary
+      ncei_name: WAVE HEIGHT - SIGNIFICANT
+  wave_tp:
+    dims: [time]
+    dtype: float32
+    attrs:
+      long_name: peak wave period
+      units: s
+      standard_name: sea_surface_wave_period_at_variance_spectral_density_maximum
+      grid_mapping: metaGridMapping
+      valid_min: 0.0
+      valid_max: 40.0
+      ancillary_variables: wave_flag_primary wave_flag_secondary
+      ncei_name: WAVE - PEAK PERIOD
+  wave_ta:
+    dims: [time]
+    dtype: float32
+    attrs:
+      long_name: average wave period
+      units: s
+      standard_name: sea_surface_wave_mean_period_from_variance_spectral_density_first_frequency_moment
+      grid_mapping: metaGridMapping
+      valid_min: 0.0
+      valid_max: 40.0
+      ancillary_variables: wave_flag_primary wave_flag_secondary
+      ncei_name: WAVE PERIOD - AVERAGE
+      additional_processing:
+        Calculated from the full-spectrum, buoy-returned energy density values.
+  wave_dp:
+    dims: [time]
+    dtype: float32
+    attrs:
+      long_name: peak wave direction
+      units: degree_true
+      standard_name: sea_surface_wave_from_direction
+      grid_mapping: metaGridMapping
+      valid_min: 0.0
+      valid_max: 360.0
+      ancillary_variables: wave_flag_primary wave_flag_secondary
+      ncei_name: WAVE DIRECTION
+      additional_processing:
+        Magnetic declination - INT(metaDeclination) - added to buoy-returned direction
+        to shift to degrees true.
+  wave_tz:
+    dims: [time]
+    dtype: float32
+    attrs:
+      long_name: spectral zero-upcross wave period
+      units: s
+      standard_name: sea_surface_wave_zero_upcrossing_period
+      grid_mapping: metaGridMapping
+      valid_min: 0.0
+      valid_max: 40.0
+      ancillary_variables: wave_flag_primary wave_flag_secondary
+  frequency_flag_primary:
+    dims: [frequency]
+    dtype: int
+    attrs:
+      units: "1"
+      long_name: primary waveFrequency QC flag
+      valid_min: 1
+      valid_max: 9
+      flag_values:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 9
+      flag_meanings: [good, not_evaluated, questionable, bad, missing]
+      reference:
+        Ocean Data Standards, UNESCO 2013 - IOC Manuals and Guides, 54, Volume 3 Version
+        1
+      ancillary_variables: frequency_flag_secondary
+  frequency_flag_secondary:
+    dims: [frequency]
+    dtype: int
+    attrs:
+      units: "1"
+      long_name: secondary waveFrequency QC flag
+      valid_min: 0
+      valid_max: 2
+      flag_values:
+        - 0
+        - 1
+        - 2
+      flag_meanings: [unspecified, out_of_range, above_hull_response_limit]
+      reference: http://cdip.ucsd.edu/documentation
+  sst_flag_primary:
+    dims: [sst_time]
+    dtype: int
+    attrs:
+      units: "1"
+      long_name: primary sst QC flag
+      valid_min: 1
+      valid_max: 9
+      flag_values:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 9
+      flag_meanings: [good, not_evaluated, questionable, bad, missing]
+      reference:
+        Ocean Data Standards, UNESCO 2013 - IOC Manuals and Guides, 54, Volume 3 Version
+        1
+      ancillary_variables: sst_flag_secondary
+  sst_flag_secondary:
+    dims: [sst_time]
+    dtype: int
+    attrs:
+      units: "1"
+      long_name: secondary sst QC flag
+      valid_min: 0
+      valid_max: 7
+      flag_values:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+      flag_meanings:
+        [
+          unspecified,
+          sensor_issues,
+          SST_out_of_range,
+          SST_spike,
+          SST_max_change_exceeded,
+          hf_transmission_errors_fixed,
+          hf_transmission_errors_present,
+          reference_temperature_off,
+        ]
+      reference: http://cdip.ucsd.edu/documentation
+  sst:
+    dims: [sst_time]
+    dtype: float32
+    attrs:
+      long_name: sea surface temperature
+      units: degree_C
+      standard_name: sea_surface_temperature
+      grid_mapping: metaGridMapping
+      valid_min: -5.0
+      valid_max: 46.150001525878906
+      ancillary_variables: sst_flag_primary sst_flag_secondary
+      ncei_name: SEA SURFACE TEMPERATURE
+      cell_methods: "sstTime: point"
+  gps_status_flags:
+    dims: [gps_time]
+    dtype: int
+    attrs:
+      units: "1"
+      long_name: gps data flags
+      flag_masks:
+        - 1
+        - 2
+        - 4
+        - 8
+      flag_meanings: [module_ok, new_fix, figure_of_merit, hf_transmission_error]
+      comment:
+        Good GPS positions will have module_ok and new_fix set, i.e. gpsStatusFlags=3.
+        All other positions should be ignored. Note that some records with
+        gpsStatusFlags=3 may also be erroneous, these values are not subject to any
+        quality control.
+  gps_latitude:
+    dims: [gps_time]
+    dtype: float32
+    attrs:
+      long_name: buoy latitude
+      units: degree_N
+      valid_min: -90.0
+      valid_max: 90.0
+      ncei_name: LATITUDE
+      cell_methods: "gpsTime: point"
+      ancillary_variables: gpsStatusFlags
+  gps_longitude:
+    dims: [gps_time]
+    dtype: float32
+    attrs:
+      long_name: buoy longitude
+      units: degree_E
+      valid_min: -180.0
+      valid_max: 180.0
+      ncei_name: LONGITUDE
+      cell_methods: "gpsTime: point"
+      ancillary_variables: gpsStatusFlags
+  dwr_orientation:
+    dims: [dwr_time]
+    dtype: float32
+    attrs:
+      long_name: buoy orientation
+      units: deg
+      standard_name: platform_orientation
+  dwr_inclination:
+    dims: [dwr_time]
+    dtype: float32
+    attrs:
+      long_name: magnetic inclination
+      units: deg
+  wave_energy_density:
+    dims: [time, frequency]
+    dtype: float32
+    attrs:
+      long_name: band energy density
+      units: m^2 s
+      standard_name: sea_surface_wave_variance_spectral_density
+      grid_mapping: metaGridMapping
+      valid_min: 0.0
+      ancillary_variables:
+        wave_flag_primary frequency_flag_primary wave_flag_secondary
+        frequency_flag_secondary
+      ncei_name: WAVE ENERGY - SPECTRAL VALUE
+  wave_mean_direction:
+    dims: [time, frequency]
+    dtype: float32
+    attrs:
+      long_name: band mean direction
+      units: degree_true
+      standard_name: sea_surface_wave_from_direction
+      grid_mapping: metaGridMapping
+      valid_min: 0.0
+      valid_max: 360.0
+      ancillary_variables:
+        wave_flag_primary frequency_flag_primary wave_flag_secondary
+        frequency_flag_secondary
+      ncei_name: WAVE DIRECTION - AVERAGE
+      additional_processing:
+        Magnetic declination (metaDeclination) added to buoy-returned direction to shift
+        to degrees true.
+  wave_check_factor:
+    dims: [time, frequency]
+    dtype: float32
+    attrs:
+      units: "1"
+      long_name: band check factor (inverse of wave ellipticity)
+      grid_mapping: metaGridMapping
+      valid_min: 0.0
+      valid_max: 2.549999952316284
+      ancillary_variables:
+        wave_flag_primary frequency_flag_primary wave_flag_secondary
+        frequency_flag_secondary
+  wave_spread:
+    dims: [time, frequency]
+    dtype: float32
+    attrs:
+      long_name: band directional spread
+      units: deg
+      grid_mapping: metaGridMapping
+      valid_min: 0.0
+      valid_max: 90.0
+      ancillary_variables:
+        wave_flag_primary frequency_flag_primary wave_flag_secondary
+        frequency_flag_secondary
