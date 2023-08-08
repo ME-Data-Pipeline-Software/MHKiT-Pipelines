@@ -1,0 +1,143 @@
+attrs:
+  title: MHKiT WEC-Sim Example
+  description:
+    This example loads simulated data from a WEC-Sim run for a two-body point absorber
+    (Reference Model 3) and demonstrates the application of the MHKiT wave module to
+    interact with the simulated data. The analysis is broken down into three parts -
+    load WEC-Sim data, view and interact with the WEC-Sim data, and apply the MHKiT wave
+    module.
+  location_id: mhkit
+  dataset_name: wecsim_example
+  data_level: a1
+  # qualifier:
+  # temporal:
+  # institution:
+
+coords:
+  time:
+    dims: [time]
+    dtype: datetime64[ms]
+    attrs:
+      long_name: Time
+      standard_name: time
+      units: Seconds since 1970-01-01 00:00:00 UTC
+      timezone: UTC
+
+data_vars:
+  water_level:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Example Variable
+      standard_name: sea_surface_height
+      units: m
+
+  body1_surge:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Body 1 Surge
+      standard_name: platform_surge
+      units: m
+
+  body1_sway:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Body 1 Sway
+      standard_name: platform_sway
+      units: m
+
+  body1_heave:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Body 1 Heave
+      standard_name: platform_heave_up
+      units: m
+
+  body1_pitch:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Body 1 Pitch
+      standard_name: platform_pitch
+      units: deg
+
+  body1_roll:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Body 1 Roll
+      standard_name: platform_roll
+      units: m
+
+  body1_yaw:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Body 1 Yaw
+      standard_name: platform_yaw
+      units: m
+
+  body2_surge:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Body 2 Surge
+      standard_name: platform_surge
+      units: m
+
+  body2_sway:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Body 2 Sway
+      standard_name: platform_sway
+      units: m
+
+  body2_heave:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Body 2 Heave
+      standard_name: platform_heave_up
+      units: m
+
+  body2_pitch:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Body 2 Pitch
+      standard_name: platform_pitch
+      units: deg
+
+  body2_roll:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Body 2 Roll
+      standard_name: platform_roll
+      units: m
+
+  body2_yaw:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Body 2 Yaw
+      standard_name: platform_yaw
+      units: m
+
+  pto_internal_power_heave:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Power Take Off Internal Power in Heave
+      units: kW
+
+  pto_generated_power_heave:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Power Take Off Generated Power in Heave
+      units: kW

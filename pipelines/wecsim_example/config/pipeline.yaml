@@ -1,0 +1,16 @@
+classname: pipelines.wecsim_example.pipeline.WECSimExample
+
+triggers:
+  # DEVELOPER: Update regex patterns that should trigger this pipeline
+  - .*\.mat
+
+retriever:
+  path: pipelines/wecsim_example/config/retriever.yaml
+
+dataset:
+  path: pipelines/wecsim_example/config/dataset.yaml
+
+quality:
+  path: shared/quality.yaml
+storage:
+  path: shared/storage.yaml

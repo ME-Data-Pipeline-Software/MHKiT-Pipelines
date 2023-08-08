@@ -1,0 +1,38 @@
+classname: tsdat.io.retrievers.DefaultRetriever
+readers:
+  .*:
+    classname: pipelines.wecsim_example.readers.WECSimReader
+
+coords:
+  time:
+    name: time
+
+data_vars:
+  water_level:
+    name: wave_elevation
+  body1_surge:
+    name: body1_position_dof1
+  body1_sway:
+    name: body1_position_dof2
+  body1_heave:
+    name: body1_position_dof3
+  body1_pitch:
+    name: body1_position_dof4
+  body1_roll:
+    name: body1_position_dof5
+  body1_yaw:
+    name: body1_position_dof6
+  body2_surge:
+    name: body2_position_dof1
+  body2_sway:
+    name: body2_position_dof2
+  body2_heave:
+    name: body2_position_dof3
+  body2_pitch:
+    name: body2_position_dof4
+  body2_roll:
+    name: body2_position_dof5
+  body2_yaw:
+    name: body2_position_dof6
+  pto_internal_power_heave:
+    name: ptos_powerInternalMechanics_dof3
