@@ -1,0 +1,58 @@
+classname: tsdat.io.retrievers.DefaultRetriever
+readers:
+  .*:
+    classname: pipelines.adv_example.readers.ADVReader
+    parameters:
+      depth_offset: 0.5
+      salinity: 30
+      magnetic_declination: 15.6
+
+coords:
+  time:
+    name: time
+    data_converters:
+      - classname: tsdat.io.converters.StringToDatetime
+        format: "%Y-%m-%d %H:%M:%S"
+        timezone: US/Pacific
+  dir:
+    name: dir
+  beam:
+    name: beam
+  inst:
+    name: inst
+  earth:
+    name: earth
+
+data_vars:
+  vel:
+    name: vel
+  amp:
+    name: amp
+  corr:
+    name: corr
+  depth:
+    name: depth
+  water_density:
+    name: water_density
+  heading:
+    name: heading
+  pitch:
+    name: pitch
+  roll:
+    name: roll
+  orientmat:
+    name: orientmat
+  beam2inst_orientmat:
+    name: beam2inst_orientmat
+  speed_of_sound:
+    name: c_sound
+  pressure:
+    name: pressure
+  temperature:
+    name: temp
+  error:
+    name: error
+  status:
+    name: status
+  orientation_down:
+    name: orientation_down

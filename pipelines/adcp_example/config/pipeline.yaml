@@ -1,0 +1,15 @@
+classname: pipelines.adcp_example.pipeline.UpLookingADCP
+
+triggers:
+  - .*\.ad2cp
+
+retriever:
+  path: pipelines/adcp_example/config/retriever.yaml
+
+dataset:
+  path: pipelines/adcp_example/config/dataset.yaml
+
+quality:
+  path: shared/quality.yaml
+storage:
+  path: shared/storage.yaml

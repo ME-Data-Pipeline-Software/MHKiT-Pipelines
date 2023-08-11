@@ -1,0 +1,16 @@
+classname: pipelines.adv_example.pipeline.ADVExample
+
+triggers:
+  - .*\.VEC
+
+retriever:
+  path: pipelines/adv_example/config/retriever.yaml
+
+dataset:
+  path: pipelines/adv_example/config/dataset.yaml
+
+quality:
+  path: pipelines/adv_example/config/quality.yaml
+
+storage:
+  path: shared/storage.yaml
