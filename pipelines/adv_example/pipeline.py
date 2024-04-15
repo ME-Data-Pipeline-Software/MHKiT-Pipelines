@@ -1,8 +1,6 @@
 import xarray as xr
-import pandas as pd
 import matplotlib.pyplot as plt
-from mhkit.dolfyn.adp import api
-from tsdat import IngestPipeline, FileSystem, get_filename
+from tsdat import IngestPipeline, FileSystem
 
 from shared.writers import MatlabWriter
 
@@ -38,11 +36,7 @@ class ADVExample(IngestPipeline):
 
     def hook_plot_dataset(self, ds: xr.Dataset):
     
-        plt.style.use("default")  # clear any styles that were set before
-        plt.style.use("shared/styling.mplstyle")
-        
-        datastream: str = self.dataset_config.attrs.datastream
-        with self.storage.uploadable_dir(datastream) as tmp_dir:
+        with plt.style.context("shared/styling.mplstyle"):
             # Velocity plot
             fig, ax = plt.subplots(figsize=(10, 6))
             ax.plot(ds.time, ds["vel"][0], label='Streamwise')
@@ -50,8 +44,8 @@ class ADVExample(IngestPipeline):
             ax.plot(ds.time, ds["vel"][2], label='Vertical')
             ax.set(xlabel="Time (UTC)", ylabel="Velocity [m/s]", ylim=(-2, 2))
 
-            plot_file = get_filename(ds, title="velocity", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("velocity")
+            fig.savefig(plot_file)
             plt.close(fig)
 
             # Beam correlation plot
@@ -61,8 +55,8 @@ class ADVExample(IngestPipeline):
             ax.plot(ds.time, ds["corr"][2], label='Beam 3')
             ax.set(xlabel="Time (UTC)", ylabel="Correlation")
 
-            plot_file = get_filename(ds, title="correlation", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("correlation")
+            fig.savefig(plot_file)
             plt.close(fig)
 
             # Beam amplitude plot
@@ -72,6 +66,6 @@ class ADVExample(IngestPipeline):
             ax.plot(ds.time, ds["amp"][2], label='Beam 3')
             ax.set(xlabel="Time (UTC)", ylabel="Amplitude [dB]")
 
-            plot_file = get_filename(ds, title="amplitude", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("amplitude")
+            fig.savefig(plot_file)
             plt.close(fig)

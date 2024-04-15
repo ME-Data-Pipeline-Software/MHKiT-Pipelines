@@ -1,6 +1,7 @@
 import xarray as xr
 import matplotlib.pyplot as plt
-from tsdat import IngestPipeline, get_filename
+from tsdat import IngestPipeline
+
 from mhkit import wave
 
 
@@ -24,15 +25,13 @@ class WECSimExample(IngestPipeline):
 
     def hook_plot_dataset(self, dataset: xr.Dataset):
         # (Optional, recommended) Create plots.
-        plt.style.use("default")  # clear any styles that were set before
-        plt.style.use("shared/styling.mplstyle")
-        datastream: str = self.dataset_config.attrs.datastream
-        with self.storage.uploadable_dir(datastream) as tmp_dir:
+
+        with plt.style.context("shared/styling.mplstyle"):
 
             fig, ax = plt.subplots(figsize=(10,6))
             dataset["water_level"].plot(ax=ax, x="time")  # type: ignore
-            plot_file = get_filename(dataset, title="water_level", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("water_level")
+            fig.savefig(plot_file)
             plt.close(fig)
 
             fig, ax = plt.subplots(figsize=(10,6))
@@ -43,8 +42,8 @@ class WECSimExample(IngestPipeline):
             ax.plot(dataset.time, dataset['body1_roll'], label='roll')
             ax.plot(dataset.time, dataset['body1_yaw'], label='yaw')
             ax.legend()
-            plot_file = get_filename(dataset, title="body1", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("body1")
+            fig.savefig(plot_file)
             plt.close(fig)
 
             fig, ax = plt.subplots(figsize=(10,6))
@@ -55,16 +54,15 @@ class WECSimExample(IngestPipeline):
             ax.plot(dataset.time, dataset['body2_roll'], label='roll')
             ax.plot(dataset.time, dataset['body2_yaw'], label='yaw')
             ax.legend()
-            plot_file = get_filename(dataset, title="body2", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("body2")
+            fig.savefig(plot_file)
             plt.close(fig)
 
             fig, ax = plt.subplots(figsize=(10,6))
             dataset["pto_generated_power_heave"].plot(ax=ax, x="time")  # type: ignore
-            plot_file = get_filename(dataset, title="PTO_power", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("PTO_power")
+            fig.savefig(plot_file)
             plt.close(fig)
-
 
             # Use the MHKiT Wave Module to calculate the wave spectrum from the WEC-Sim Wave Class Data
             sample_rate=60
@@ -75,6 +73,6 @@ class WECSimExample(IngestPipeline):
             fig, ax = plt.subplots(figsize=(10,6))
             wave.graphics.plot_spectrum(ws_spectrum, ax=ax)
             ax.set_xlim([0, 4])
-            plot_file = get_filename(dataset, title="wave_spectrum", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("wave_spectrum")
+            fig.savefig(plot_file)
             plt.close(fig)

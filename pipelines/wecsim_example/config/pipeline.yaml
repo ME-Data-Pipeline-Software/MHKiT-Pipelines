@@ -1,7 +1,6 @@
 classname: pipelines.wecsim_example.pipeline.WECSimExample
 
 triggers:
-  # DEVELOPER: Update regex patterns that should trigger this pipeline
   - .*\.mat
 
 retriever:

@@ -1,7 +1,8 @@
 import numpy as np
 import xarray as xr
 import matplotlib.pyplot as plt
-from tsdat import IngestPipeline, get_filename
+from tsdat import IngestPipeline
+
 from mhkit import wave
 
 
@@ -57,30 +58,25 @@ class WaveExample(IngestPipeline):
         # Create power matrix using mean
         PM_mean = wave.performance.power_matrix(LM_mean, JM)
 
-
-        plt.style.use("default")  # clear any styles that were set before
-        plt.style.use("shared/styling.mplstyle")
-
-        datastream: str = self.dataset_config.attrs.datastream
-        with self.storage.uploadable_dir(datastream) as tmp_dir:
+        with plt.style.context("shared/styling.mplstyle"):
 
             fig, ax = plt.subplots(figsize=(10,7))
-            wave.graphics.plot_matrix(LM_mean, xlabel='Energy Period [s]', ylabel='Sig Wave Height [m]', \
+            wave.graphics.plot_matrix(LM_mean, xlabel='Energy Period [s]', ylabel='Sig Wave Height [m]',
               zlabel='Capture Length [m]', show_values=False, ax=ax)
-            plot_file = get_filename(dataset, title="capture_length_matrix", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("capture_length_matrix")
+            fig.savefig(plot_file)
             plt.close(fig)
 
             fig, ax = plt.subplots(figsize=(10,7))
-            wave.graphics.plot_matrix(PM_mean, xlabel='Energy Period [s]', ylabel='Sig Wave Height [m]', \
+            wave.graphics.plot_matrix(PM_mean, xlabel='Energy Period [s]', ylabel='Sig Wave Height [m]',
               zlabel='Mean Device Power [W]', show_values=False, ax=ax)
-            plot_file = get_filename(dataset, title="power_matrix", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("power_matrix")
+            fig.savefig(plot_file)
             plt.close(fig)
 
             fig, ax = plt.subplots(figsize=(10,7))
-            wave.graphics.plot_matrix(JM, xlabel='Energy Period [s]', ylabel='Sig Wave Height [m]', \
+            wave.graphics.plot_matrix(JM, xlabel='Energy Period [s]', ylabel='Sig Wave Height [m]',
               zlabel='Mean Resource Power [W]', show_values=False, ax=ax)
-            plot_file = get_filename(dataset, title="wave_energy_matrix", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("wave_energy_matrix")
+            fig.savefig(plot_file)
             plt.close(fig)

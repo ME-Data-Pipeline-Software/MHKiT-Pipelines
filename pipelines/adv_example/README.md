@@ -1,4 +1,4 @@
-# Up-looking ADCP Ingestion Pipeline
+# ADV Ingestion Pipeline
 
 This pipeline reads in binary files output from an ADCP mounted on a bottom lander. It 
 is currently set up to read in water-track data from a 5 beam ADCP You may need to add 
@@ -28,7 +28,7 @@ commands:  `conda activate tsdat-pipelines`
 This pipeline is set up to handle data created by a Nortek Signature1000. It also has some basic parameters 
 set up for sampling in Sequim Bay.
 
-1. If you are not running the echo sounder, navigate to `pipelines/sigvm/config` and open `retriever.yaml`. 
+1. If you are not running the echo sounder, navigate to `pipelines/adv_example/config` and open `retriever.yaml`. 
 Remove all entries that have the `_echo` tag. You can do this as well for `dataset.yaml`, but this isn't critical.
 
 2. There are a number of parameters listed in `retriever.yaml` in lines 15-18 that should be updated.
@@ -41,12 +41,10 @@ Remove all entries that have the `_echo` tag. You can do this as well for `datas
 
 3. In `dataset.yaml`, update the information under the `attrs` block per the data collection specifics.
 
-4. There is one parameter listed in `shared/quality.yaml` that can be updated:
+4. You may need to update the "trigger" listed in `config/pipeline.yaml` for your ADCP's binary file extension.
 
-    a. "correlation_threshold", on line 71, is for a QC test that removes velocity data below a certain % acoustic signal 
-    correlation.
-
-5. You may need to update the "trigger" listed in `config/pipeline.yaml` for your ADCP's binary file extension.
+5. Change number of points used for Goring-Nikora 2002 in `config/quality.yaml` and uncomment handler for
+cubic spline interpolation.
 
 ============================================================================================================
 

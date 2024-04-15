@@ -10,6 +10,7 @@ dataset:
   path: pipelines/tidal_example/config/dataset.yaml
 
 quality:
-  path: shared/quality.yaml
+  path: pipelines/tidal_example/config/quality.yaml
+
 storage:
   path: shared/storage.yaml

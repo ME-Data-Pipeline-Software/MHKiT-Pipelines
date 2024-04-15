@@ -1,7 +1,8 @@
 import numpy as np
 import xarray as xr
 import matplotlib.pyplot as plt
-from tsdat import IngestPipeline, get_filename
+from tsdat import IngestPipeline
+
 from mhkit import tidal
 
 
@@ -15,17 +16,6 @@ class TidalExample(IngestPipeline):
     def hook_customize_dataset(self, dataset: xr.Dataset) -> xr.Dataset:
         # (Optional) Use this hook to modify the dataset before qc is applied
 
-        # discard samples where the timestamps are not increasing
-        t0 = dataset['time'].values[0]
-        failures = xr.DataArray(np.zeros(len(dataset.time), dtype=bool), coords={'time':dataset['time']})
-        for i, t in enumerate(dataset['time'].values[1:-1]):
-            if t>t0:
-                failures[i+1] = 0
-                t0 = t
-            else:
-                failures[i+1] = 1
-        dataset = dataset.where(~failures, drop=True)
-
         width_direction = 1
         s = dataset['water_speed'].to_pandas()
         d = dataset['water_direction'].to_pandas()
@@ -35,7 +25,7 @@ class TidalExample(IngestPipeline):
         dataset.attrs['principal_directions'] = list(directions)
 
         # Calculate exceedance probability of data
-        dataset['exceed_prob'].values = tidal.resource.exceedance_probability(s).squeeze()
+        dataset['exceed_prob'].values = tidal.resource.exceedance_probability(s).squeeze().astype('float32')
 
         return dataset
 
@@ -47,10 +37,7 @@ class TidalExample(IngestPipeline):
     def hook_plot_dataset(self, dataset: xr.Dataset):
         # (Optional, recommended) Create plots.
 
-        plt.style.use("default")  # clear any styles that were set before
-        plt.style.use("shared/styling.mplstyle")
-        datastream: str = self.dataset_config.attrs.datastream
-        with self.storage.uploadable_dir(datastream) as tmp_dir:
+        with plt.style.context("shared/styling.mplstyle"):
 
             fig, ax = plt.subplots(2,1, figsize=(10,10))
             # Plot entire dataset
@@ -68,8 +55,8 @@ class TidalExample(IngestPipeline):
                 dataset['water_speed'].sel(time=time_slc).to_pandas(), 
                 dataset.principal_directions[0], 
                 ax=ax[1])
-            plot_file = get_filename(dataset, title="flow_speed", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("flow_speed")
+            fig.savefig(plot_file)
             plt.close(fig)
 
 
@@ -87,8 +74,8 @@ class TidalExample(IngestPipeline):
                 flood=dataset.principal_directions[0], 
                 ebb=dataset.principal_directions[1],
                 ax=ax)
-            plot_file = get_filename(dataset, title="prob_distribution", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("prob_distribution")
+            fig.savefig(plot_file)
             plt.close(fig)
 
 
@@ -106,8 +93,8 @@ class TidalExample(IngestPipeline):
                 flood=dataset.principal_directions[0], 
                 ebb=dataset.principal_directions[1],
                 ax=ax)
-            plot_file = get_filename(dataset, title="rose", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("rose")
+            fig.savefig(plot_file)
             plt.close(fig)
 
             ## Plot exceedance probability Curve
@@ -116,8 +103,8 @@ class TidalExample(IngestPipeline):
                 dataset['water_speed'].to_pandas(), 
                 dataset['exceed_prob'].to_pandas(), 
                 ax=ax)
-            plot_file = get_filename(dataset, title="exceedance", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("exceedance")
+            fig.savefig(plot_file)
             plt.close(fig)
 
             ## Plot phase probability bar chart
@@ -128,8 +115,8 @@ class TidalExample(IngestPipeline):
                 flood=dataset.principal_directions[0], 
                 ebb=dataset.principal_directions[1],
                 ax=ax)
-            plot_file = get_filename(dataset, title="phase_prob", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("phase_prob")
+            fig.savefig(plot_file)
             plt.close(fig)
 
             ## Plot phase exceedance
@@ -140,6 +127,6 @@ class TidalExample(IngestPipeline):
                 flood=dataset.principal_directions[0], 
                 ebb=dataset.principal_directions[1],
                 ax=ax)
-            plot_file = get_filename(dataset, title="phase_exceedance", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("phase_exceedance")
+            fig.savefig(plot_file)
             plt.close(fig)

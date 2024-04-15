@@ -1,7 +1,7 @@
-import numpy as np
 import xarray as xr
 import matplotlib.pyplot as plt
-from tsdat import IngestPipeline, get_filename
+from tsdat import IngestPipeline
+
 from mhkit import loads, utils
 
 
@@ -39,12 +39,9 @@ class LoadsExample(IngestPipeline):
         df = dataset[['uWind_80m', 'TB_ForeAft', 'BL1_FlapMom']].to_pandas()
         means,maxs,mins,std = utils.get_statistics(df, freq=50, period=600)
 
-        plt.style.use("default")  # clear any styles that were set before
-        plt.style.use("shared/styling.mplstyle")
-        datastream: str = self.dataset_config.attrs.datastream
-        with self.storage.uploadable_dir(datastream) as tmp_dir:
+        with plt.style.context("shared/styling.mplstyle"):
 
-            plot_file = get_filename(dataset, title="blade_root", extension="png")
+            plot_file = self.get_ancillary_filepath("blade_root")
             loads.graphics.plot_statistics(means['uWind_80m'],
                                 means['BL1_FlapMom'],
                                 maxs['BL1_FlapMom'],
@@ -53,9 +50,9 @@ class LoadsExample(IngestPipeline):
                                 xlabel='Wind Speed [m/s]',
                                 ylabel='Blade Flap Moment [kNm]',
                                 title = 'Blade Flap Moment Load Statistics', 
-                                save_path = str(tmp_dir / plot_file))
+                                save_path = str(plot_file))
             
-            plot_file = get_filename(dataset, title="tower_base", extension="png")
+            plot_file = self.get_ancillary_filepath("tower_base")
             loads.graphics.plot_statistics(means['uWind_80m'],
                                 means['TB_ForeAft'],
                                 maxs['TB_ForeAft'],
@@ -64,7 +61,7 @@ class LoadsExample(IngestPipeline):
                                 xlabel='Wind Speed [m/s]',
                                 ylabel='Tower Base Moment [kNm]',
                                 title = 'Tower Base Moment Load Statistics',
-                                save_path = str(tmp_dir / plot_file))
+                                save_path = str(plot_file))
 
         ## Create array containing wind speeds to use as bin edges
         # bin_edges = np.arange(3,26,1)
@@ -88,10 +85,10 @@ class LoadsExample(IngestPipeline):
         # bin_min_std = bin_mins_std[signal_name]
 
         # # Plot binned statistics
-        # plot_file = get_filename(dataset, title="binned_stats", extension="png")
+        # plot_file = self.get_ancillary_filepath("binned_stats")
         # loads.graphics.plot_bin_statistics(bin_centers,bin_mean,bin_max,bin_min,
         #                         bin_mean_std,bin_max_std,bin_min_std,
         #                         xlabel='Wind Speed [m/s]',
         #                         ylabel=signal_name,
         #                         title='Binned Statistics',
-        #                         save_path = str(tmp_dir / plot_file))
+        #                         save_path = str(plot_file))

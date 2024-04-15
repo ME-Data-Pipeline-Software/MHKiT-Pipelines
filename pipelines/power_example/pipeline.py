@@ -1,7 +1,7 @@
-
 import xarray as xr
 import matplotlib.pyplot as plt
-from tsdat import IngestPipeline, get_filename
+from tsdat import IngestPipeline
+
 from mhkit import power
 
 
@@ -35,18 +35,14 @@ class PowerExample(IngestPipeline):
         current = dataset[['a_current','b_current','c_current']].to_pandas()
         harmonics = power.quality.harmonics(current, int(dataset.sample_freq), int(dataset.grid_freq))
 
-
-        plt.style.use("default")  # clear any styles that were set before
-        plt.style.use("shared/styling.mplstyle")
-        datastream: str = self.dataset_config.attrs.datastream
-        with self.storage.uploadable_dir(datastream) as tmp_dir:
+        with plt.style.context("shared/styling.mplstyle"):
             ## Plot AC Power
             fig, ax = plt.subplots(figsize=(15,5))
             ax.plot(dataset.time, dataset['ac_power'])
             ax.set(ylabel='Power [W]', xlabel='Time (UTC)')
             
-            plot_file = get_filename(dataset, title="ac_power", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("ac_power")
+            fig.savefig(plot_file)
             plt.close(fig)
 
             ## Plot instantaneous frequency
@@ -56,8 +52,8 @@ class PowerExample(IngestPipeline):
             ax.plot(dataset.time, dataset['c_inst_freq'], label='C')
             ax.set(ylabel='Frequency [Hz]', xlabel='Time (UTC)', ylim=(0,120))
             
-            plot_file = get_filename(dataset, title="inst_frequency", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("inst_frequency")
+            fig.savefig(plot_file)
             plt.close(fig)
 
 
@@ -69,6 +65,6 @@ class PowerExample(IngestPipeline):
             ax.set(ylabel='Harmonic Amplitude', xlabel='Frequency [Hz]', xlim=(0,900))
             ax.legend()
 
-            plot_file = get_filename(dataset, title="harmonics", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("harmonics")
+            fig.savefig(plot_file)
             plt.close(fig)

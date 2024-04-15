@@ -1,4 +1,4 @@
-tsdat >=0.6.0,<0.7.0
+tsdat >=0.7.4
 cmocean  
 act-atmos
 typer

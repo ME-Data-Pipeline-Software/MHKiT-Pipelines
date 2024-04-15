@@ -1,6 +1,7 @@
 import xarray as xr
 import matplotlib.pyplot as plt
-from tsdat import IngestPipeline, get_filename
+from tsdat import IngestPipeline
+
 from mhkit import river
 
 
@@ -14,7 +15,7 @@ class RiverExample(IngestPipeline):
     def hook_customize_dataset(self, dataset: xr.Dataset) -> xr.Dataset:
         # (Optional) Use this hook to modify the dataset before qc is applied
         Q = dataset['discharge'].to_pandas()
-        dataset['exceed_prob'].values = river.resource.exceedance_probability(Q).squeeze()
+        dataset['exceed_prob'].values = river.resource.exceedance_probability(Q).squeeze().astype('float32')
 
         return dataset
 
@@ -26,17 +27,13 @@ class RiverExample(IngestPipeline):
     def hook_plot_dataset(self, dataset: xr.Dataset):
         # (Optional, recommended) Create plots.
 
-        plt.style.use("default")  # clear any styles that were set before
-        plt.style.use("shared/styling.mplstyle")
-        datastream: str = self.dataset_config.attrs.datastream
-        with self.storage.uploadable_dir(datastream) as tmp_dir:
+        with plt.style.context("shared/styling.mplstyle"):
             # Plot discharge timeseries
             fig, ax = plt.subplots(figsize=(10,6))
             river.graphics.plot_discharge_timeseries(dataset['discharge'].to_pandas(),
                                                      ax=ax)
-
-            plot_file = get_filename(dataset, title="discharge", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("discharge")
+            fig.savefig(plot_file)
             plt.close(fig)
 
             # Plot exceedance probability
@@ -44,7 +41,6 @@ class RiverExample(IngestPipeline):
             river.graphics.plot_flow_duration_curve(dataset['discharge'].to_pandas(), 
                                                     dataset['exceed_prob'].to_pandas(),
                                                     ax=ax)
-
-            plot_file = get_filename(dataset, title="exceedance", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("exceedance")
+            fig.savefig(plot_file)
             plt.close(fig)

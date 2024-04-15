@@ -94,21 +94,21 @@ data_vars:
   sample_freq:
     data: 50000
     dims: []
-    dtype: int
+    dtype: int32
     attrs:
       long_name: Sample Frequency
       units: Hz
   grid_freq:
     data: 60
     dims: []
-    dtype: int
+    dtype: int32
     attrs:
       long_name: Grid Frequency
       units: Hz
   rated_current:
     data: 18.8
     dims: []
-    dtype: int
+    dtype: int32
     attrs:
       long_name: Rated Current
       units: A

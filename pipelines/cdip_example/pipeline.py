@@ -1,9 +1,9 @@
 import os
-import numpy as np
 import xarray as xr
 import matplotlib.pyplot as plt
 from cmocean.cm import amp_r, dense, haline
-from tsdat import IngestPipeline, get_filename
+from tsdat import IngestPipeline
+
 from mhkit import wave
 
 
@@ -46,10 +46,7 @@ class CDIPWaveBuoy(IngestPipeline):
     def hook_plot_dataset(self, dataset: xr.Dataset):
         ds = dataset      
 
-        plt.style.use("default")  # clear any styles that were set before
-        plt.style.use("shared/styling.mplstyle")
-        datastream: str = dataset.attrs["datastream"]
-        with self.storage.uploadable_dir(datastream) as tmp_dir:
+        with plt.style.context("shared/styling.mplstyle"):
             fig, axs = plt.subplots(nrows=3)
 
             # Plot Wave Heights
@@ -79,8 +76,8 @@ class CDIPWaveBuoy(IngestPipeline):
             for i in range(len(axs)):
                 axs[i].set_xlabel("Time (UTC)")
 
-            plot_file = get_filename(ds, title="wave_data_plots", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("wave_data_plots")
+            fig.savefig(plot_file)
             plt.close(fig)
 
 
@@ -90,8 +87,8 @@ class CDIPWaveBuoy(IngestPipeline):
             try: # Need one year of data
                 wave.graphics.plot_boxplot(Hs, buoy_title=buoy_name)
                 fig = plt.gcf()
-                plot_file = get_filename(ds, title="boxplot", extension="png")
-                fig.savefig(tmp_dir / plot_file)
+                plot_file = self.get_ancillary_filepath("boxplot")
+                fig.savefig(plot_file)
                 plt.close(fig)
             except:
                 pass
@@ -101,6 +98,6 @@ class CDIPWaveBuoy(IngestPipeline):
             Dp = dataset['wave_dp'].to_series()
             wave.graphics.plot_compendium(Hs, Tp, Dp, buoy_name)
             fig = plt.gcf()
-            plot_file = get_filename(ds, title="compendium", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath("compendium")
+            fig.savefig(plot_file)
             plt.close(fig)
